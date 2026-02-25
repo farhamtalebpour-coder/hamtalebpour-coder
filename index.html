@@ -4,18 +4,58 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Setayesh 💏</title>
+
+<!-- Google Fonts: Dancing Script برای حس دست‌نویس عاشقانه -->
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Special+Elite&display=swap" rel="stylesheet">
+
 <style>
 body {
     margin: 0; padding: 0;
     font-family: 'Segoe UI', Tahoma, sans-serif;
-    background: #fff; color: #333;
+    background: linear-gradient(135deg, #ffe6f2, #fff0f5, #f8e1e9);
+    color: #333;
     display: flex; flex-direction: column;
     justify-content: center; align-items: center;
     height: 100vh; text-align: center; overflow: hidden;
+    position: relative;
+}
+
+/* Floating hearts background */
+.hearts-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+}
+.heart-particle {
+    position: absolute;
+    font-size: 18px;
+    color: #ff69b4;
+    opacity: 0.7;
+    animation: floatUp linear infinite;
+    transform: translateX(-50%);
+}
+@keyframes floatUp {
+    0%   { transform: translateY(110vh) rotate(0deg); opacity: 0.8; }
+    100% { transform: translateY(-20vh) rotate(720deg); opacity: 0; }
+}
+
+/* Glow name */
+.glow-name {
+    font-family: 'Dancing Script', cursive;
+    font-size: 3.2rem;
+    color: #ff1493;
+    text-shadow: 0 0 15px #ff69b4, 0 0 30px #ff1493, 0 0 50px #ff69b4;
+    margin: 10px 0 30px;
+    animation: glow 3s ease-in-out infinite alternate;
+}
+@keyframes glow {
+    from { text-shadow: 0 0 10px #ff69b4; }
+    to   { text-shadow: 0 0 40px #ff1493, 0 0 70px #ff69b4; }
 }
 
 /* Lock Screen */
-#lockScreen { display: flex; flex-direction: column; align-items: center; }
+#lockScreen { display: flex; flex-direction: column; align-items: center; z-index: 10; }
 input {
     padding: 12px 20px; font-size: 18px; border-radius: 12px;
     border: 1px solid #ddd; margin: 15px 0; width: 180px; text-align: center;
@@ -28,7 +68,7 @@ button:hover { background: #c2185b; }
 
 /* Main Screen */
 #mainScreen {
-    display: none; flex-direction: column; align-items: center; position: relative;
+    display: none; flex-direction: column; align-items: center; position: relative; z-index: 5;
 }
 
 /* قلب تپنده CSS */
@@ -48,7 +88,6 @@ button:hover { background: #c2185b; }
 }
 .heart::before { top: -60px; left: 0; }
 .heart::after { left: 60px; top: 0; }
-
 @keyframes beat {
     0%, 100% { transform: translate(-50%, -50%) rotate(-45deg) scale(1); }
     50%      { transform: translate(-50%, -50%) rotate(-45deg) scale(1.18); }
@@ -59,12 +98,15 @@ button:hover { background: #c2185b; }
     position: absolute; top: 20px; right: 20px;
     background: #e91e63; color: white; border: none; border-radius: 50%;
     width: 50px; height: 50px; font-size: 20px; cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 10;
 }
 
-/* پیام */
+/* پیام با typewriter */
 #message {
-    font-size: 20px; line-height: 1.6; max-width: 85%; color: #444; padding: 0 15px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 24px;
+    line-height: 1.6; max-width: 85%; color: #444; padding: 0 15px;
+    min-height: 140px; white-space: pre-wrap;
 }
 
 /* Modal */
@@ -90,15 +132,19 @@ button:hover { background: #c2185b; }
 #hearts { font-size: 45px; margin-top: 25px; letter-spacing: 15px; }
 
 @media (max-width: 480px) {
+    .glow-name { font-size: 2.5rem; }
     .heart-container { width: 200px; height: 200px; }
     .heart, .heart::before, .heart::after { width: 100px; height: 100px; }
     .heart::before { top: -50px; }
     .heart::after { left: 50px; }
     #soundToggle { top: 10px; right: 10px; width: 40px; height: 40px; font-size: 18px; }
+    #message { font-size: 20px; }
 }
 </style>
 </head>
 <body>
+
+<div class="hearts-bg" id="heartsBg"></div>
 
 <div id="lockScreen">
     <h2>تاریخ خاص ما رو وارد کن ❤️</h2>
@@ -107,13 +153,15 @@ button:hover { background: #c2185b; }
 </div>
 
 <div id="mainScreen">
+    <h1 class="glow-name">ستایش جانم 💕</h1>
+    
     <button id="soundToggle" onclick="toggleSound()">🔊</button>
     
     <div class="heart-container" onclick="openModal()">
         <div class="heart"></div>
     </div>
     
-    <div id="message">مثل خون در رگ‌های من... ممنون که اومدی و جانی دوباره بهم دادی تا بجنگم با این دنیای بد و نامرد</div>
+    <div id="message"></div>
 </div>
 
 <div id="modal">
@@ -132,25 +180,33 @@ button:hover { background: #c2185b; }
     </div>
 </div>
 
-<!-- افکت‌ها و موسیقی -->
+<!-- افکت‌ها و موسیقی (لینک‌ها رو اگر کار نکرد جایگزین کن) -->
 <audio id="kissSound" preload="auto">
     <source src="https://cdn.pixabay.com/download/audio/2022/05/25/audio_kiss-64509.mp3" type="audio/mpeg">
-    <!-- اگر لینک بالا کار نکرد، به pixabay.com/sound-effects/search/kiss برو و اولین فایل کوتاه رو دانلود کن و جایگزین کن -->
 </audio>
 
 <audio id="heartbeatSound" preload="auto">
     <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_heartbeat-64510.mp3" type="audio/mpeg">
-    <!-- جایگزین: به pixabay.com/sound-effects/search/heartbeat برو و یک فایل کوتاه انتخاب کن -->
 </audio>
 
 <audio id="bgMusic" loop>
     <source src="https://cdn.pixabay.com/download/audio/2023/08/07/audio_3b8d4f8f8f.mp3?filename=romantic-piano-208065.mp3" type="audio/mpeg">
-    <!-- اگر کار نکرد: به pixabay.com/music/search/romantic%20piano برو و یک ترک دانلود کن و جایگزین کن -->
 </audio>
 
 <script>
 // رمز ورود
 const correctDate = "14041118";
+
+const messageText = "مثل خون در رگ‌های من... ممنون که اومدی و جانی دوباره بهم دادی تا بجنگم با این دنیای بد و نامرد";
+let charIndex = 0;
+
+function typeWriter() {
+    if (charIndex < messageText.length) {
+        document.getElementById("message").innerHTML += messageText.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeWriter, 70); // سرعت تایپ – می‌تونی تغییر بدی
+    }
+}
 
 function checkDate() {
     const input = document.getElementById("dateInput").value.trim();
@@ -159,11 +215,13 @@ function checkDate() {
         document.getElementById("mainScreen").style.display = "flex";
         startTimer();
         
+        // شروع تایپ پیام
+        setTimeout(typeWriter, 600);
+        
+        // موسیقی
         const music = document.getElementById("bgMusic");
         music.volume = 0.25;
-        music.play().catch(err => {
-            console.log("موسیقی زمینه شروع نشد (احتمالاً نیاز به تعامل کاربر دارد):", err);
-        });
+        music.play().catch(() => {});
     } else {
         alert("فقط تو این تاریخ رو می‌دونی... 😏");
     }
@@ -172,18 +230,12 @@ function checkDate() {
 function openModal() {
     document.getElementById("modal").style.display = "flex";
     
-    // پخش افکت بوسه
     const kiss = document.getElementById("kissSound");
-    kiss.currentTime = 0;
-    kiss.volume = 0.8;
-    kiss.play().catch(err => console.log("افکت بوسه پخش نشد:", err));
+    kiss.currentTime = 0; kiss.volume = 0.8; kiss.play().catch(() => {});
     
-    // پخش ضربان قلب با تاخیر کوچک
     setTimeout(() => {
-        const heartBeat = document.getElementById("heartbeatSound");
-        heartBeat.currentTime = 0;
-        heartBeat.volume = 0.5;
-        heartBeat.play().catch(err => console.log("افکت ضربان قلب پخش نشد:", err));
+        const hb = document.getElementById("heartbeatSound");
+        hb.currentTime = 0; hb.volume = 0.5; hb.play().catch(() => {});
     }, 400);
 }
 
@@ -195,14 +247,26 @@ function toggleSound() {
     const music = document.getElementById("bgMusic");
     const btn = document.getElementById("soundToggle");
     if (music.paused || music.muted) {
-        music.muted = false;
-        music.play();
-        btn.textContent = "🔊";
+        music.muted = false; music.play(); btn.textContent = "🔊";
     } else {
-        music.muted = true;
-        btn.textContent = "🔇";
+        music.muted = true; btn.textContent = "🔇";
     }
 }
+
+// Floating hearts
+function createHeart() {
+    const heart = document.createElement("div");
+    heart.className = "heart-particle";
+    heart.innerHTML = Math.random() > 0.5 ? "❤️" : "💗";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (Math.random() * 10 + 12) + "s";
+    heart.style.fontSize = (Math.random() * 14 + 14) + "px";
+    document.getElementById("heartsBg").appendChild(heart);
+    
+    setTimeout(() => heart.remove(), 25000);
+}
+
+setInterval(createHeart, 500); // هر نیم ثانیه یک قلب جدید
 
 // تایمر + حداکثر ۲ قلب
 function startTimer() {
@@ -214,33 +278,4 @@ function startTimer() {
         let m = now.getMonth() - start.getMonth();
         let d = now.getDate() - start.getDate();
         let h = now.getHours() - start.getHours();
-        let min = now.getMinutes() - start.getMinutes();
-        let s = now.getSeconds() - start.getSeconds();
-
-        if (s < 0) { min--; s += 60; }
-        if (min < 0) { h--; min += 60; }
-        if (h < 0) { d--; h += 24; }
-        if (d < 0) {
-            m--;
-            const prev = new Date(now.getFullYear(), now.getMonth(), 0);
-            d += prev.getDate();
-        }
-        if (m < 0) { y--; m += 12; }
-
-        document.getElementById("years").textContent = y;
-        document.getElementById("months").textContent = m;
-        document.getElementById("days").textContent = d;
-        document.getElementById("hours").textContent = h;
-        document.getElementById("minutes").textContent = min;
-        document.getElementById("seconds").textContent = s;
-
-        const heartsCount = Math.min(2, y + m + d);
-        document.getElementById("hearts").textContent = '❤️'.repeat(heartsCount);
-    }
-
-    update();
-    setInterval(update, 1000);
-}
-</script>
-</body>
-    </html>
+        let min = now.getMinutes() - start.getMinutes
