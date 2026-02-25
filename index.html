@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Setayesh 💏</title>
+<style>
+body{
+    margin:0; padding:0;
+    font-family:'Segoe UI', Tahoma, sans-serif;
+    background:#fff; color:#333;
+    display:flex; flex-direction:column;
+    justify-content:center; align-items:center;
+    height:100vh; text-align:center; overflow:hidden;
+}
+
+/* Lock Screen */
+#lockScreen{ display:flex; flex-direction:column; align-items:center; }
+input{
+    padding:12px 20px; font-size:18px; border-radius:12px;
+    border:1px solid #ddd; margin:15px 0; width:180px; text-align:center;
+}
+button{
+    padding:12px 35px; font-size:17px; border:none; border-radius:12px;
+    background:#e91e63; color:white; cursor:pointer; transition:0.3s;
+}
+button:hover{ background:#c2185b; }
+
+/* Main Screen */
+#mainScreen{
+    display:none; flex-direction:column; align-items:center; position:relative;
+}
+.kiss{
+    width:240px; height:240px; object-fit:contain; cursor:pointer; margin:25px 0;
+}
+
+/* دکمه صدا */
+#soundToggle{
+    position:absolute; top:20px; right:20px;
+    background:#e91e63; color:white; border:none; border-radius:50%;
+    width:50px; height:50px; font-size:20px; cursor:pointer;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* پیام */
+#message{
+    font-size:20px; line-height:1.6; max-width:85%; color:#444; padding:0 15px;
+}
+
+/* Modal */
+#modal{
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.75); justify-content:center; align-items:center; z-index:1000;
+}
+#modalContent{
+    background:#ffebee; padding:35px 30px; border-radius:20px;
+    max-width:90%; width:420px; text-align:center;
+    box-shadow:0 15px 40px rgba(0,0,0,0.25); border:2px solid #ffc1e3;
+}
+#closeBtn{
+    margin-top:20px; padding:12px 30px; border:none; border-radius:12px;
+    background:#e91e63; color:white; font-size:16px; cursor:pointer;
+}
+#closeBtn:hover{ background:#c2185b; }
+
+/* جدول تایمر */
+#timerTable { width:100%; border-collapse:collapse; margin:20px 0; font-size:19px; }
+#timerTable td { padding:10px 15px; border-bottom:1px solid #ffc1e3; }
+#timerTable td:first-child { font-weight:bold; color:#c2185b; text-align:right; width:40%; }
+#hearts { font-size:45px; margin-top:25px; letter-spacing:15px; }
+
+@media(max-width:480px){
+    .kiss{ width:200px; height:200px; }
+    #soundToggle{ top:10px; right:10px; width:40px; height:40px; font-size:18px; }
+}
+</style>
+</head>
+<body>
+
+<div id="lockScreen">
+    <h2>تاریخ خاص ما رو وارد کن ❤️</h2>
+    <input type="password" id="dateInput" placeholder="YYYYMMDD">
+    <button onclick="checkDate()">باز کردن</button>
+</div>
+
+<div id="mainScreen">
+    <button id="soundToggle" onclick="toggleSound()">🔊</button>
+    <img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHExcHg4YmIycHNiZzd2MTR6dGs5NHdwc3M2NnpzZHUxOGFpZjdqdCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Vr115pWzOnMtO/giphy.gif" 
+         class="kiss" onclick="openModal()" alt="بوسه عاشقانه">
+    <div id="message">مثل خون در رگ‌های من... ممنون که اومدی و جانی دوباره بهم دادی تا بجنگم با این دنیای بد و نامرد</div>
+</div>
+
+<div id="modal">
+    <div id="modalContent">
+        <h3>❤️ ساعت‌شمار عشق ما ❤️</h3>
+        <table id="timerTable">
+            <tr><td>سال</td><td id="years">0</td></tr>
+            <tr><td>ماه</td><td id="months">0</td></tr>
+            <tr><td>روز</td><td id="days">0</td></tr>
+            <tr><td>ساعت</td><td id="hours">0</td></tr>
+            <tr><td>دقیقه</td><td id="minutes">0</td></tr>
+            <tr><td>ثانیه</td><td id="seconds">0</td></tr>
+        </table>
+        <div id="hearts"></div>
+        <button id="closeBtn" onclick="closeModal()">بستن</button>
+    </div>
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="https://cdn.pixabay.com/audio/2023/08/07/audio_3b8d4f8f8f.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+// رمز ورود
+const correctDate = "14041118";
+
+function checkDate(){
+    const input = document.getElementById("dateInput").value.trim();
+    if(input === correctDate){
+        document.getElementById("lockScreen").style.display = "none";
+        document.getElementById("mainScreen").style.display = "flex";
+        startTimer();
+        const music = document.getElementById("bgMusic");
+        music.volume = 0.35;
+        music.play().catch(() => {});
+    } else {
+        alert("فقط تو این تاریخ رو می‌دونی... 😏");
+    }
+}
+
+function openModal(){ document.getElementById("modal").style.display = "flex"; }
+function closeModal(){ document.getElementById("modal").style.display = "none"; }
+
+function toggleSound(){
+    const music = document.getElementById("bgMusic");
+    const btn = document.getElementById("soundToggle");
+    if(music.paused || music.muted){
+        music.muted = false; music.play(); btn.textContent = "🔊";
+    } else {
+        music.muted = true; btn.textContent = "🔇";
+    }
+}
+
+// تایمر دقیق + فقط ۲ قلب
+function startTimer(){
+    const start = new Date(2026, 1, 7, 2, 47, 0);
+
+    function update(){
+        const now = new Date();
+        let y = now.getFullYear() - start.getFullYear();
+        let m = now.getMonth() - start.getMonth();
+        let d = now.getDate() - start.getDate();
+        let h = now.getHours() - start.getHours();
+        let min = now.getMinutes() - start.getMinutes();
+        let s = now.getSeconds() - start.getSeconds();
+
+        if(s < 0){ min--; s += 60; }
+        if(min < 0){ h--; min += 60; }
+        if(h < 0){ d--; h += 24; }
+        if(d < 0){
+            m--;
+            const prev = new Date(now.getFullYear(), now.getMonth(), 0);
+            d += prev.getDate();
+        }
+        if(m < 0){ y--; m += 12; }
+
+        document.getElementById("years").textContent = y;
+        document.getElementById("months").textContent = m;
+        document.getElementById("days").textContent = d;
+        document.getElementById("hours").textContent = h;
+        document.getElementById("minutes").textContent = min;
+        document.getElementById("seconds").textContent = s;
+
+        const heartsCount = Math.min(2, y + m + d);
+        document.getElementById("hearts").textContent = '❤️'.repeat(heartsCount);
+    }
+
+    update();
+    setInterval(update, 1000);
+}
+</script>
+</body>
+  </html>
